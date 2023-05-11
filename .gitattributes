@@ -1,0 +1,379 @@
+
+# Assumptions
+# 
+# All filetypes (file suffixes) in everyone's local filesystems will be lowercased.
+# Files with uppercased letters in the suffixes will be ignored by this config.
+# If we wanted to support mixed-case suffixes, we'd need to adjust this file like this:
+# *.jpg *.[jJ][pP][gG]
+# But doing that is harder to read ...aaAaAnD could lead to its own problems.
+# For later exploration: There might be some git-hook way to mandate this at the server.
+#
+# exceptions made: TGA FBX JPG TTF PNG XML
+#
+# In general, everyone will avoid committing filenames and paths that differ only in capitalization.
+# (If you do need to correct an improperly-cased file, some shenanigans will be necessary.)
+#
+
+# Notes
+# This config can use "macros" that you define with "[attr]" followed by the configuration line that
+# it should be replaced by/considered the same as.
+
+# Resources:
+#   - https://github.com/NYUGameCenter/Unity-Git-Config
+#   - https://www.kernel.org/pub/software/scm/git/docs/gitattributes.html
+#   - http://davidlaing.com/2012/09/19/customise-your-gitattributes-to-become-a-git-ninja/
+#   - https://git-scm.com/docs/gitattributes
+#
+#   - https://help.github.com/articles/dealing-with-line-endings/
+#   - https://adaptivepatchwork.com/2012/03/01/mind-the-end-of-your-line/
+#   - https://www.edwardthomson.com/blog/git_for_windows_line_endings.html
+#   - https://docs.github.com/en/get-started/getting-started-with-git/configuring-git-to-handle-line-endings
+
+# Set the default line-ending normalization behavior, in case people don't have core.autocrlf set.
+# * text=auto
+# Or, aggressively DON'T mess with line endings, in the case of a repo that already has files in it
+# that you don't have time to force everyone to run git renormalizaion and have merge conflicts.
+* -text
+
+# Source code and their preferred endings
+*.cs diff=csharp text
+*.go             text eol=lf
+*.java           text
+*.js             text
+*.json           text linguist-language=JSON-with-Comments
+*.md             text
+*.py             text eol=lf filter=tabspace
+*.scala          text
+*.sh             text eol=lf
+*.gradle         text
+*.xml            text
+*.XML            text
+*.bat            text eol=crlf
+*.info           text
+*.md             text
+*.inc            text
+*.msbuild        text
+
+# bash files not having the .sh extension
+gradlew          text eol=lf
+
+# other text
+makefile         text
+rakefile         text
+*.yaml           text 
+*.yml            text
+*.csv            text
+*.sln            text eol=crlf
+
+# NPM "bin" scripts MUST have LF, or else the executable fails to run on Mac.
+# This fnmatch expression only matches files in a "bin" folder and without
+# a period in the filename.
+/*/*/bin/+([!.]) -text
+
+## Unity ##
+
+# Macro: files with Unity's YAML format
+# diff means that despite other settings, we *do* want to be able to see textual diffs of these
+# merge=unityyamlmerge means to (attempt to) use UnityYAMLMerge for merging these files.
+#                     ( see https://docs.unity3d.com/Manual/SmartMerge.html ) 
+# eol=lf means that we want LF line endings on these files in the working directory, which effectively sets 'text'
+[attr]unity-yaml-file diff merge=unityyamlmerge eol=lf
+
+## LFS Unity files: Large, Unity-specific binary files (and/or large static text files)
+*-[Nn]av[Mm]esh.asset binary
+*-[Tt]errain.asset binary
+*-[Tt]errainData.asset binary
+Terrain_meshes.asset binary
+LightingData.asset binary
+Rewired_Core.XML binary
+*.cubemap binary
+*.unitypackage binary
+
+# Unity .asset files that are actually JSON (not YAML)
+XRSettings.asset text
+
+# Unity YAML files (especially, we want to be able to diff .asset files!)
+*.asset unity-yaml-file
+*.asmdef unity-yaml-file
+*.anim unity-yaml-file
+*.brush unity-yaml-file
+*.controller unity-yaml-file
+*.flare unity-yaml-file
+*.fontsettings unity-yaml-file
+*.giparams unity-yaml-file
+*.guiskin unity-yaml-file
+*.mask unity-yaml-file
+*.mat unity-yaml-file
+*.meta unity-yaml-file
+*.mixer unity-yaml-file
+*.overrideController unity-yaml-file
+*.physic[mM]aterial unity-yaml-file
+*.physicsMaterial2D unity-yaml-file
+*.playable unity-yaml-file
+*.prefab unity-yaml-file
+*.preset unity-yaml-file
+*.renderTexture unity-yaml-file
+*.shadervariants unity-yaml-file
+*.spriteatlas unity-yaml-file
+*.terrainlayer unity-yaml-file
+*.unity unity-yaml-file
+
+# Collapse Unity-generated files on GitHub (more info: https://robots.thoughtbot.com/github-diff-supression) 
+# linguist-generated is a github keyword to ignore files for language statistics and hide diffs in the github UI.
+*.asset linguist-generated
+*.mat linguist-generated
+*.meta linguist-generated
+*.prefab linguist-generated
+*.unity linguist-generated
+
+# Shaders
+*.shader text eol=lf
+*.cginc text eol=lf
+*.hlsl text eol=lf
+*.compute text eol=lf
+
+# LFS Image Files
+*.exr binary
+*.png binary
+*.PNG binary
+*.jpg binary
+*.JPG binary
+*.jpeg binary
+*.tif binary
+*.tiff binary
+*.bmp binary
+*.eps binary
+*.exr  binary
+*.tga binary
+*.TGA binary
+*.psd binary
+*.ai binary
+*.indd binary
+*.gif binary
+*.pict binary
+*.pdf binary
+*.hdr binary
+*.iff binary
+*.xcf binary
+*.spp binary
+*.afdesign binary
+*.dds binary
+
+# LFS Video Files
+*.asf binary
+*.mp4 binary
+*.mov binary
+*.m4a binary
+*.mpg binary
+*.mpeg binary
+*.mpeg1 binary
+*.mpeg2 binary
+*.mpeg4 binary
+*.avi binary
+*.flv binary
+*.wmv binary
+*.264 binary
+*.h264 binary
+*.hvec binary
+*.mjpeg binary
+*.mjpg binary
+*.3gp binary
+*.3GP binary
+*.DVX binary
+*.dvx binary
+*.ogv binary
+*.webm binary
+*.xvid binary
+
+# 3D Objects
+*.abc binary
+*.sib binary
+*.tbscene binary
+*.mlt binary
+*.zpr binary
+*.mtl text
+
+# LFS Mesh Files
+*.FBX binary
+*.fbx binary
+*.blend binary
+*.blend1 binary
+*.collada binary
+*.Max binary
+*.MAX binary
+*.MB binary
+*.MA binary
+*.mb binary
+*.ma binary
+*.jas binary
+*.c4d binary
+*.gLFT binary
+*.gltf binary
+*.glTF binary
+*.GLTF binary
+*.max binary
+*.obj binary
+*.lxo binary
+*.lwo binary
+*.lwo2 binary
+*.3dm binary
+*.3ds binary
+*.3DS binary
+*.dwg binary
+*.dxf binary
+*.stl binary
+*.dae binary
+*.dem binary
+*.ddf binary
+*.kmz binary
+*.wlr binary
+*.xsi binary
+*.ifc binary
+*.epx binary
+*.skp binary
+*.skb binary
+*.off binary
+*.ply binary
+*.sc1 binary
+*.ztl binary
+
+# LFS Substance Files
+*.sbs binary
+*.sbsar binary
+*.sbsprs binary
+*.SBS binary
+*.SBSAR binary
+*.SBSPRS binary
+
+# LFS Audio Files
+*.mp3 binary
+*.ogg binary
+*.wav binary
+*.aif binary
+*.aiff binary
+*.flac binary
+*.opus binary
+*.imp binary
+*.it binary
+*.mod binary
+*.xm binary
+*.s3m binary
+*.mid binary
+*.midi binary
+
+# LFS Music Projects
+# ableton
+*.als binary 
+*.alp binary
+*.ask binary
+*.adg binary
+*.adv binary
+*.alc binary
+*.agr binary
+*.ams binary
+*.amxd binary
+# audition
+*.sesx binary
+*.SESX binary
+*.ses binary
+*.SES binary
+*.cel binary
+*.fft binary
+*.flt binary
+# garageband
+*.band binary
+*.BAND binary
+# logic
+*.lxo binary
+*.logicx binary
+*.logic binary
+# reaper
+*.RPP binary
+*.rpp binary
+*.RPP-bak binary
+*.rpp-bak binary
+# reason
+*.reason binary
+*.rns binary
+# Open Interchange: omf/iff/aaf
+*.omf binary
+*.OMF binary
+*.iff binary
+*.IFF binary
+*.aaf binary
+*.AAF binary
+# protools
+*.ptf binary
+*.pts binary
+# WWise
+.bnk binary
+
+# LFS Fonts
+*.ttf binary
+*.TTF binary
+*.ttc binary
+*.ufo binary
+*.otf binary
+*.fnt binary
+*.fon binary
+*.fot binary
+*.woff binary
+*.woff2 binary
+
+# LFS Symbol Files
+*.pdb binary
+
+# LFS Libraries
+*.dll binary
+*.a binary
+*.lib binary
+*.dylib binary
+*.so binary
+
+# LFS Builds & Utilities
+*.apk binary
+*.dmg binary
+*.ipa binary
+*.exe binary
+*.app binary
+
+# LFS Archives
+*.zip binary
+*.zipx binary
+*.s7z binary
+*.jar binary
+*.7z binary
+*.zz binary
+*.rar binary
+*.ace binary
+*.sitx binary
+*.ar binary
+*.iso binary
+*.tar binary
+*.gz binary
+*.bz2 binary
+*.lz binary
+*.lzma binary
+*.lzh binary
+*.tar.gz binary
+*.tgz binary
+*.tar.Z binary
+*.tar.bz2 binary
+*.tar.lzma binary
+*.tlz binary
+*.tar.xz binary
+*.txz binary
+*.cab binary
+
+# Other
+*.caffemodel binary
+*.mr binary
+
+# Special exceptions
+Assets/_ExperienceExpression/BuiltIn/AssetBundles/Win64/04-30-2020-nothingness_rift binary
+Assets/Art/AssetStore/Mirza[[:space:]]Beig/Particle[[:space:]]Systems/Ultimate[[:space:]]VFX/1[[:space:]]-[[:space:]]Assets/Scenes/1[[:space:]]-[[:space:]]Ultimate[[:space:]]VFX[[:space:]](Demo).unity binary
+
+# temporary, redundant call-outs
+Assets/XR/Loaders/Wave[[:space:]]XR[[:space:]]Loader.asset unity-yaml-file
+Assets/XR/Settings/Wave[[:space:]]XR[[:space:]]Settings.asset unity-yaml-file
+Assets/Resources/OVRBuildConfig.asset unity-yaml-file
