@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace InfiRun
 {
-    public class PlayerMovement : MonoBehaviour
+    public class PlayerController : MonoBehaviour
     {
         const float gravity = -30;
 
