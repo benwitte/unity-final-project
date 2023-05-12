@@ -18,29 +18,29 @@ namespace InfiRun
 
         public void Start()
         {
-            characterController = GetComponent<CharacterController>();
+            characterController = GetComponentInChildren<CharacterController>();
         }
 
         public void Update()
         {
-            var movement = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
-            movement = transform.rotation * movement;
+            HandleMovement();
+        }
+
+        private void HandleMovement()
+        {
+            var movement = transform.rotation * new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
 
             if (characterController.isGrounded)
             {
                 if (Input.GetButtonDown("Jump"))
-                {
                     yspeed = jumpSpeed;
-                }
             }
             else
             {
                 yspeed += gravity * Time.deltaTime;
             }
 
-            float magnitude = Mathf.Clamp01(movement.magnitude) * moveSpeed;
-
-            Vector3 velocity = movement * magnitude;
+            Vector3 velocity = movement * Mathf.Clamp01(movement.magnitude) * moveSpeed;
             velocity.y = yspeed;
 
             characterController.Move(velocity * Time.deltaTime);
