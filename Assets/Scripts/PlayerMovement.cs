@@ -2,81 +2,45 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerMovement : MonoBehaviour
+namespace InfiRun
 {
-    public float jumpSpeed = 15;
-
-    public float moveSpeed = 5f;
-
-    private float gravity = -30;
-
-    CharacterController controller;
-
-
-    private Vector3 startPosition;
-
-    private float yspeed;
-
-
-
-
-    // Start is called before the first frame update
-    void Start()
+    public class PlayerMovement : MonoBehaviour
     {
-        controller = GetComponent<CharacterController>(); 
-    }
+        const float gravity = -30;
 
-    // Update is called once per frame
-    void Update()
-    {
+        CharacterController characterController;
+        float yspeed;
 
-        Vector3 move = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+        public float jumpSpeed = 15;
+        public float moveSpeed = 5f;
 
-
-    
-        if (controller.isGrounded)
+        public void Start()
         {
-
-            if (Input.GetButtonDown("Jump"))
-            {
-                yspeed = jumpSpeed;
-            }
-        } else 
-        {
-            yspeed += gravity*Time.deltaTime;
+            characterController = GetComponent<CharacterController>();
         }
 
+        public void Update()
+        {
+            var movement = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
 
-        float magnitude = Mathf.Clamp01(move.magnitude) * moveSpeed;
+            if (characterController.isGrounded)
+            {
+                if (Input.GetButtonDown("Jump"))
+                {
+                    yspeed = jumpSpeed;
+                }
+            }
+            else
+            {
+                yspeed += gravity * Time.deltaTime;
+            }
 
-        Vector3 velocity = move * magnitude;
-        velocity.y = yspeed;
+            float magnitude = Mathf.Clamp01(movement.magnitude) * moveSpeed;
 
-        controller.Move(velocity * Time.deltaTime);
+            Vector3 velocity = movement * magnitude;
+            velocity.y = yspeed;
 
-
-        /*
-         if (Input.GetKey(KeyCode.A)) 
-         {
-            Debug.Log("left");
-         }
-         if (Input.GetKey(KeyCode.D)) 
-         {
-            Debug.Log("right");
-         }
-         if (Input.GetKey(KeyCode.W)) 
-         {
-            Debug.Log("forward");
-         }
-         if (Input.GetKey(KeyCode.S)) 
-         {
-            Debug.Log("backward");
-         }
-         if (Input.GetKey(KeyCode.Space)) 
-         {
-            Debug.Log("jump");
-         }
-         */
-    
+            characterController.Move(velocity * Time.deltaTime);
+        }
     }
 }
