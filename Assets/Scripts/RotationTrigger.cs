@@ -10,7 +10,7 @@ namespace InfiRun
         public void Start()
         {
             canTurn = false;
-            controller = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
+            controller = GameController.GetCurrentController();
         }
 
         public void OnTriggerEnter() => canTurn = true;
