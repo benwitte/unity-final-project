@@ -10,6 +10,7 @@ namespace InfiRun
         public GameObject player;
         public GameObject ball;
         public AudioSource bgmSource;
+        public AudioSource ballAudioSource;
 
         [Header("GameBegin UI")]
         public Canvas gameBeginCanvas;
@@ -48,6 +49,7 @@ namespace InfiRun
             gameUICanvas.enabled = true;
             IsPlaying = true;
             bgmSource.Play();
+            ballAudioSource.Play();
         }
 
         public void ReloadScene()
@@ -66,14 +68,35 @@ namespace InfiRun
             {
                 playerController.worldMoveSpeed *= 1.1f;
                 playerController.moveSpeed *= 1.1f;
+                ball.GetComponent<Animator>().speed *= 1.1f;
             }
+        }
+
+        System.Collections.IEnumerator AnimateBallRolling()
+        {
+            const float lerpDuration = 0.5f;
+            float timeElapsed = 0;
+
+            var originalPos = ball.transform.localPosition;
+
+            while (timeElapsed < lerpDuration)
+            {
+                ball.transform.localPosition = originalPos + Vector3.Lerp(Vector3.zero, new Vector3(0, 0, 2), timeElapsed / lerpDuration);
+
+                timeElapsed += Time.deltaTime;
+                yield return null;
+            }
+            ball.transform.localPosition = originalPos + Vector3.Lerp(Vector3.zero, new Vector3(0, 0, 2), 1);
+
+            if (ball.transform.position.z + 2 >= player.transform.position.z)
+                EndGame();
+
+            yield return null;
         }
 
         public void Penalize()
         {
-            ball.transform.Translate(new Vector3(0, 0, 2));
-            if (ball.transform.position.z + 2 >= player.transform.position.z)
-                EndGame();
+            StartCoroutine(AnimateBallRolling());
         }
 
         public void Lose()
@@ -85,6 +108,7 @@ namespace InfiRun
         {
             IsPlaying = false;
             bgmSource.Stop();
+            ballAudioSource.Stop();
 
             gameUICanvas.enabled = false;
             gameOverCanvas.enabled = true;
