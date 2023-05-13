@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace InfiRun
 {
@@ -6,8 +7,19 @@ namespace InfiRun
     {
         public CameraController cameraController;
         public PlayerController playerController;
-        public TMPro.TextMeshProUGUI scoreLabel;
         public GameObject ball;
+
+        [Header("GameBegin UI")]
+        public Canvas gameBeginCanvas;
+
+        [Header("UI")]
+        public Canvas gameUICanvas;
+        public TMPro.TextMeshProUGUI scoreLabel;
+
+        [Header("GameOver UI")]
+        public Canvas gameOverCanvas;
+        public TMPro.TextMeshProUGUI winLoseLabel;
+        public TMPro.TextMeshProUGUI finalScoreLabel;
 
         public bool IsPlaying;
         public int Score { get; private set; }
@@ -20,7 +32,18 @@ namespace InfiRun
 
         public void Start()
         {
+            IsPlaying = false;
+        }
+
+        public void StartGame()
+        {
+            gameBeginCanvas.enabled = false;
             IsPlaying = true;
+        }
+
+        public void ReloadScene()
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex, LoadSceneMode.Single);
         }
 
         void Update()
@@ -47,6 +70,7 @@ namespace InfiRun
         public void Lose()
         {
             IsPlaying = false;
+            gameOverCanvas.enabled = true;
         }
     }
 }
