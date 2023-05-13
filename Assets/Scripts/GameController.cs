@@ -106,8 +106,9 @@ namespace InfiRun
             }
             ball.transform.localPosition = originalPos + Vector3.Lerp(Vector3.zero, new Vector3(0, 0, 2), 1);
 
-            if (ball.transform.position.z + 2 >= player.transform.position.z)
+            if (ball.transform.localPosition.z + 2 >= player.transform.localPosition.z)
             {
+                Debug.Log("Player got crushed");
                 PlaySFX(SfxKind.Crash);
                 EndGame();
             }

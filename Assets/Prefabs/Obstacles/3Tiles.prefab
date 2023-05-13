@@ -12,6 +12,8 @@ GameObject:
   - component: {fileID: 8708393384368567510}
   - component: {fileID: 6863093225758294044}
   - component: {fileID: 2291177442414916634}
+  - component: {fileID: 148559727534864767}
+  - component: {fileID: 796826614155701294}
   m_Layer: 0
   m_Name: 3Tiles
   m_TagString: Untagged
@@ -97,3 +99,31 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.089999996, y: 0.029999994, z: 0.029999994}
   m_Center: {x: -0.029999997, y: 0, z: 0}
+--- !u!54 &148559727534864767
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4917480667683037641}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 1
+--- !u!114 &796826614155701294
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4917480667683037641}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a8138b17af319034b83d2fab12042cca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

@@ -19,13 +19,11 @@ namespace InfiRun
 
         public void OnTriggerStay(Collider other)
         {
-            if (!canTurn) return;
+            if (!(canTurn && other.tag == "Player")) return;
 
-            Debug.Log(other);
             var movement = Input.GetAxis("Horizontal");
-            if (System.Math.Abs(movement) > float.Epsilon && other.tag == "Player")
+            if (System.Math.Abs(movement) > float.Epsilon)
             {
-                Debug.Log("Test!");
                 bool isRightTurn = movement > float.Epsilon;
                 controller.playerController.Turn(isRightTurn);
                 canTurn = false;

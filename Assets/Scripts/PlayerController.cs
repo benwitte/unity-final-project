@@ -25,8 +25,8 @@ namespace InfiRun
 
         public void Update()
         {
-            if (characterController.gameObject.transform.position.y < 0) gameController.Lose();
             if (!gameController.IsPlaying) return;
+            if (characterController.gameObject.transform.position.y < -2) { Debug.Log("Falling"); gameController.Lose(); }
 
             HandleMovement();
         }
