@@ -34,7 +34,7 @@ namespace InfiRun
         public TMPro.TextMeshProUGUI finalScoreLabel;
 
         public bool IsPlaying;
-        public int Score { get; private set; }
+        public double Score { get; private set; }
 
         const int winningThreshold = 50000;
         bool didPlayWinningSFX;
@@ -73,8 +73,8 @@ namespace InfiRun
         {
             if (!IsPlaying) return;
 
-            Score++;
-            scoreLabel.text = Score.ToString();
+            Score += Time.deltaTime * 1000;
+            scoreLabel.text = ((int)System.Math.Floor(Score)).ToString();
 
             if (Score % 1500 == 0 && Score < 25000)
             {
@@ -137,7 +137,7 @@ namespace InfiRun
 
             bool won = !forceLoss && Score >= winningThreshold;
             winLoseLabel.text = won ? "You win!" : "You lose!";
-            finalScoreLabel.text = Score.ToString();
+            finalScoreLabel.text = ((int)System.Math.Floor(Score)).ToString();
         }
 
         public enum SfxKind
