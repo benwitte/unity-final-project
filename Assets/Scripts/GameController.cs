@@ -6,7 +6,6 @@ namespace InfiRun
     {
         public CameraController cameraController;
         public PlayerController playerController;
-        public WorldController worldController;
         public TMPro.TextMeshProUGUI scoreLabel;
         public GameObject ball;
 
@@ -30,6 +29,12 @@ namespace InfiRun
 
             Score++;
             scoreLabel.text = Score.ToString();
+
+            if (Score % 1500 == 0 && Score < 25000)
+            {
+                playerController.worldMoveSpeed *= 1.1f;
+                playerController.moveSpeed *= 1.1f;
+            }
         }
 
         public void Penalize()
