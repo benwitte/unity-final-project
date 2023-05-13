@@ -10,7 +10,8 @@ namespace InfiRun
         public TMPro.TextMeshProUGUI scoreLabel;
         public GameObject ball;
 
-        int score = 0;
+        public bool IsPlaying;
+        public int Score { get; private set; }
 
         // Not the best way of doing it but whatever lol
         public static GameController GetCurrentController()
@@ -18,10 +19,17 @@ namespace InfiRun
             return GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
         }
 
+        public void Start()
+        {
+            IsPlaying = true;
+        }
+
         void Update()
         {
-            score++;
-            scoreLabel.text = score.ToString();
+            if (!IsPlaying) return;
+
+            Score++;
+            scoreLabel.text = Score.ToString();
         }
 
         public void Penalize()
@@ -33,7 +41,7 @@ namespace InfiRun
 
         public void Lose()
         {
-            worldController.moveSpeed = Vector3.zero;
+            IsPlaying = false;
         }
     }
 }

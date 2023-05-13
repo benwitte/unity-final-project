@@ -9,20 +9,25 @@ namespace InfiRun
         const float gravity = -30;
 
         CharacterController characterController;
+        GameController gameController;
         float yspeed;
-        bool isRotating;
 
 
         public float jumpSpeed = 15;
         public float moveSpeed = 5f;
+        public float worldMoveSpeed = 10f;
 
         public void Start()
         {
             characterController = GetComponentInChildren<CharacterController>();
+            gameController = GameController.GetCurrentController();
         }
 
         public void Update()
         {
+            if (characterController.gameObject.transform.position.y < 0) gameController.Lose();
+            if (!gameController.IsPlaying) return;
+
             HandleMovement();
         }
 
@@ -40,34 +45,15 @@ namespace InfiRun
                 yspeed += gravity * Time.deltaTime;
             }
 
-            Vector3 velocity = movement * Mathf.Clamp01(movement.magnitude) * moveSpeed;
+            Vector3 velocity = (movement * Mathf.Clamp01(movement.magnitude) * moveSpeed) + (transform.rotation * Vector3.forward * worldMoveSpeed);
             velocity.y = yspeed;
 
             characterController.Move(velocity * Time.deltaTime);
         }
 
-        IEnumerator TurnCoroutine(bool turnRight)
-        {
-            const float lerpDuration = 0.5f;
-            isRotating = true;
-            float timeElapsed = 0;
-            Quaternion startRotation = transform.rotation;
-            Quaternion targetRotation = transform.rotation * Quaternion.Euler(0, turnRight ? 90 : -90, 0);
-
-            while (timeElapsed < lerpDuration)
-            {
-                transform.rotation = Quaternion.Slerp(startRotation, targetRotation, timeElapsed / lerpDuration);
-                timeElapsed += Time.deltaTime;
-                yield return null;
-            }
-            transform.rotation = targetRotation;
-            isRotating = false;
-        }
-
         public void Turn(bool turnRight)
         {
-            if (isRotating) return;
-            StartCoroutine(TurnCoroutine(turnRight));
+            transform.rotation *= Quaternion.Euler(0, turnRight ? 90 : -90, 0);
         }
     }
 }
