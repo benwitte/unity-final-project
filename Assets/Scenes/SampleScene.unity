@@ -5896,6 +5896,7 @@ MonoBehaviour:
   hitClip: {fileID: 8300000, guid: fcce4e3feae3a1e4c932925c88acf11c, type: 3}
   jumpClip: {fileID: 8300000, guid: 6b3b82a8883b31a4fb1bdb75afc3319e, type: 3}
   crashClip: {fileID: 8300000, guid: 861507f9cdc17f740a4173f1fdbbb306, type: 3}
+  successClip: {fileID: 8300000, guid: 99ee5e4701729b443b3b96caf43bcc68, type: 3}
   gameBeginCanvas: {fileID: 384943648}
   gameUICanvas: {fileID: 1696434978}
   scoreLabel: {fileID: 1209806023}

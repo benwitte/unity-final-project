@@ -19,6 +19,7 @@ namespace InfiRun
         public AudioClip hitClip;
         public AudioClip jumpClip;
         public AudioClip crashClip;
+        public AudioClip successClip;
 
         [Header("GameBegin UI")]
         public Canvas gameBeginCanvas;
@@ -34,6 +35,9 @@ namespace InfiRun
 
         public bool IsPlaying;
         public int Score { get; private set; }
+
+        const int winningThreshold = 50000;
+        bool didPlayWinningSFX;
 
         // Not the best way of doing it but whatever lol
         public static GameController GetCurrentController()
@@ -77,6 +81,12 @@ namespace InfiRun
                 playerController.worldMoveSpeed *= 1.1f;
                 playerController.moveSpeed *= 1.1f;
                 ball.GetComponent<Animator>().speed *= 1.1f;
+            }
+
+            if (Score >= winningThreshold && !didPlayWinningSFX)
+            {
+                PlaySFX(SfxKind.Success);
+                didPlayWinningSFX = true;
             }
         }
 
@@ -124,14 +134,14 @@ namespace InfiRun
             gameUICanvas.enabled = false;
             gameOverCanvas.enabled = true;
 
-            bool won = !forceLoss && Score >= (100 * 1000);
+            bool won = !forceLoss && Score >= winningThreshold;
             winLoseLabel.text = won ? "You win!" : "You lose!";
             finalScoreLabel.text = Score.ToString();
         }
 
         public enum SfxKind
         {
-            WallHit, Jump, Crash
+            WallHit, Jump, Crash, Success
         }
 
         public void PlaySFX(SfxKind kind)
@@ -141,6 +151,7 @@ namespace InfiRun
                 case SfxKind.WallHit: sfxAudioSource.PlayOneShot(hitClip); break;
                 case SfxKind.Jump: sfxAudioSource.PlayOneShot(jumpClip); break;
                 case SfxKind.Crash: sfxAudioSource.PlayOneShot(crashClip); break;
+                case SfxKind.Success: sfxAudioSource.PlayOneShot(successClip); break;
             }
         }
     }
