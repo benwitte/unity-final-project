@@ -35,10 +35,10 @@ namespace InfiRun
         {
             var movement = transform.rotation * new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
 
-            if (characterController.isGrounded)
+            if (characterController.isGrounded && Input.GetButtonDown("Jump"))
             {
-                if (Input.GetButtonDown("Jump"))
-                    yspeed = jumpSpeed;
+                gameController.PlaySFX(GameController.SfxKind.Jump);
+                yspeed = jumpSpeed;
             }
             else
             {

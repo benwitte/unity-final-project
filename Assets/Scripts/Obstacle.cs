@@ -14,6 +14,7 @@ namespace InfiRun
         private void OnCollisionEnter(Collision collision)
         {
             if (collision.gameObject.tag != "Player") return;
+            gameController.PlaySFX(GameController.SfxKind.WallHit);
             gameController.Penalize();
             Destroy(this.gameObject);
         }

@@ -9,8 +9,16 @@ namespace InfiRun
         public PlayerController playerController;
         public GameObject player;
         public GameObject ball;
+
+        [Header("Audio Sources")]
         public AudioSource bgmSource;
         public AudioSource ballAudioSource;
+        public AudioSource sfxAudioSource;
+
+        [Header("SFX Clips")]
+        public AudioClip hitClip;
+        public AudioClip jumpClip;
+        public AudioClip crashClip;
 
         [Header("GameBegin UI")]
         public Canvas gameBeginCanvas;
@@ -89,7 +97,10 @@ namespace InfiRun
             ball.transform.localPosition = originalPos + Vector3.Lerp(Vector3.zero, new Vector3(0, 0, 2), 1);
 
             if (ball.transform.position.z + 2 >= player.transform.position.z)
+            {
+                PlaySFX(SfxKind.Crash);
                 EndGame();
+            }
 
             yield return null;
         }
@@ -116,6 +127,21 @@ namespace InfiRun
             bool won = !forceLoss && Score >= (100 * 1000);
             winLoseLabel.text = won ? "You win!" : "You lose!";
             finalScoreLabel.text = Score.ToString();
+        }
+
+        public enum SfxKind
+        {
+            WallHit, Jump, Crash
+        }
+
+        public void PlaySFX(SfxKind kind)
+        {
+            switch (kind)
+            {
+                case SfxKind.WallHit: sfxAudioSource.PlayOneShot(hitClip); break;
+                case SfxKind.Jump: sfxAudioSource.PlayOneShot(jumpClip); break;
+                case SfxKind.Crash: sfxAudioSource.PlayOneShot(crashClip); break;
+            }
         }
     }
 }
